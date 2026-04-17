@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard de Aberroes Dash</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --panel: #171a21;
+      --panel-2: #1e2330;
+      --line: #2b3242;
+      --text: #ece7d8;
+      --muted: #b9b29c;
+      --gold: #d4a94c;
+      --gold-2: #f0c96b;
+      --blue: #74b7ff;
+      --red: #9f3d2f;
+      --green: #4f8a5a;
+      --shadow: 0 12px 32px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(116,183,255,.12), transparent 25%),
+        radial-gradient(circle at top right, rgba(212,169,76,.10), transparent 22%),
+        linear-gradient(180deg, #0e1014 0%, #12151c 100%);
+      color: var(--text);
+    }
+
+    .container {
+      width: min(1400px, calc(100% - 32px));
+      margin: 24px auto 40px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .portrait {
+      position: relative;
+      min-height: 100%;
+      background: #0d0f14;
+    }
+
+    .portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .portrait .tag {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      background: rgba(15,17,21,.78);
+      border: 1px solid rgba(240,201,107,.35);
+      color: var(--gold-2);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      letter-spacing: .04em;
+      backdrop-filter: blur(6px);
+    }
+
+    .hero-main {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+    }
+
+    .header {
+      padding: 24px 26px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      color: var(--gold-2);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1;
+      letter-spacing: -.03em;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 16px 26px 0;
+    }
+
+    .pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      padding: 20px 26px 26px;
+    }
+
+    .statbox {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .statbox .label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 6px;
+    }
+
+    .statbox .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold-2);
+      line-height: 1;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+    }
+
+    .section {
+      padding: 20px 22px 22px;
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: 1.1rem;
+      color: var(--gold-2);
+      letter-spacing: .01em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 10px 10px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-weight: 600;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    .cols {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .list-item {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+
+    .list-item strong { color: var(--text); }
+    .muted { color: var(--muted); }
+
+    .items-table td:nth-child(1) { min-width: 220px; }
+    .items-table td:nth-child(2),
+    .items-table td:nth-child(3),
+    .items-table td:nth-child(4) {
+      white-space: nowrap;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: var(--text);
+    }
+
+    .badge.gold { color: var(--gold-2); border-color: rgba(240,201,107,.25); }
+    .badge.blue { color: var(--blue); border-color: rgba(116,183,255,.25); }
+    .badge.red { color: #f19989; border-color: rgba(159,61,47,.25); }
+    .badge.green { color: #9dd0a5; border-color: rgba(79,138,90,.25); }
+
+    .full { grid-column: 1 / -1; }
+
+    @media (max-width: 1100px) {
+      .hero, .grid-2, .cols { grid-template-columns: 1fr; }
+      .hero-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 700px) {
+      .container { width: min(100% - 20px, 1400px); }
+      .hero-grid { grid-template-columns: 1fr 1fr; padding: 16px; }
+      .header, .pill-row { padding-left: 16px; padding-right: 16px; }
+      .section { padding: 16px; }
+      h1 { font-size: 2rem; }
+      .items-table { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <div class="card portrait">
+        <img src="Aberroes Dash.png" alt="Aberroes Dash" />
+        <div class="tag">Aberroes Dash</div>
+      </div>
+
+      <div class="card hero-main">
+        <div class="header">
+          <div class="eyebrow">Dashboard del personaje</div>
+          <h1>Aberroes Dash</h1>
+          <div class="subtitle">Humano convertido en kobold · Mago nivel 9 · War Caster · Legal bueno · Asociado a Bahamut</div>
+        </div>
+
+        <div class="pill-row">
+          <div class="pill">Clase: Mago</div>
+          <div class="pill">Subclase: War Caster</div>
+          <div class="pill">Nivel: 9</div>
+          <div class="pill">Raza: Humano convertido en Kobold</div>
+          <div class="pill">Alineamiento: Legal bueno</div>
+        </div>
+
+        <div class="hero-grid">
+          <div class="statbox">
+            <div class="label">HP</div>
+            <div class="value">69</div>
+          </div>
+          <div class="statbox">
+            <div class="label">CA</div>
+            <div class="value">17</div>
+          </div>
+          <div class="statbox">
+            <div class="label">Iniciativa</div>
+            <div class="value">+8</div>
+          </div>
+          <div class="statbox">
+            <div class="label">Velocidad</div>
+            <div class="value">30 ft</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid-2">
+      <div class="card section">
+        <h2>Atributos</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Atributo</th>
+              <th>Valor</th>
+              <th>Modificador</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Fuerza</td><td>12</td><td>+1</td></tr>
+            <tr><td>Destreza</td><td>13</td><td>+1</td></tr>
+            <tr><td>Constitución</td><td>16</td><td>+3</td></tr>
+            <tr><td>Inteligencia</td><td>20</td><td>+5</td></tr>
+            <tr><td>Sabiduría</td><td>14</td><td>+2</td></tr>
+            <tr><td>Carisma</td><td>9</td><td>−1</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card section">
+        <h2>Magia</h2>
+        <table>
+          <tbody>
+            <tr><th>Habilidad</th><td>Inteligencia</td></tr>
+            <tr><th>CD de conjuros</th><td>17</td></tr>
+            <tr><th>Ataque de conjuros</th><td>+9</td></tr>
+            <tr><th>Salvación de Inteligencia</th><td>+9</td></tr>
+            <tr><th>Salvación de Sabiduría</th><td>+6</td></tr>
+          </tbody>
+        </table>
+
+        <h2 style="margin-top:18px;">Ranuras de conjuro</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Nivel</th>
+              <th>Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Nivel 1</td><td>4</td></tr>
+            <tr><td>Nivel 2</td><td>3</td></tr>
+            <tr><td>Nivel 3</td><td>3</td></tr>
+            <tr><td>Nivel 4</td><td>3</td></tr>
+            <tr><td>Nivel 5</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="cols">
+      <div class="card section">
+        <h2>Habilidades destacadas</h2>
+        <div class="list">
+          <div class="list-item"><strong>Arcana</strong>: +9</div>
+          <div class="list-item"><strong>Investigación</strong>: +9</div>
+          <div class="list-item"><strong>Supervivencia</strong>: +6</div>
+          <div class="list-item"><strong>Historia</strong>: +5</div>
+          <div class="list-item"><strong>Naturaleza</strong>: +5</div>
+          <div class="list-item"><strong>Religión</strong>: +5</div>
+        </div>
+      </div>
+
+      <div class="card section">
+        <h2>Rasgos clave</h2>
+        <div class="list">
+          <div class="list-item"><strong>Ritual Casting</strong><br><span class="muted">Puede lanzar rituales sin preparar.</span></div>
+          <div class="list-item"><strong>Arcane Recovery</strong><br><span class="muted">Recupera slots tras descanso corto.</span></div>
+          <div class="list-item"><strong>Steady (Marine)</strong><br><span class="muted">Mayor resistencia a viajes prolongados.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section full">
+      <h2>Objetos clave</h2>
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th>Objeto</th>
+            <th>Rareza</th>
+            <th>Sintonización</th>
+            <th>Consumible</th>
+            <th>Efectos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Collar de Héroes Kobolds</strong></td>
+            <td><span class="badge gold">Legendario</span></td>
+            <td><span class="badge blue">Sí</span></td>
+            <td><span class="badge">No</span></td>
+            <td>Otorga progresión de rasgos por nivel. Nivel 1: tamaño Small, rasgos kobold y menor carga. Nivel 2: visión en la oscuridad 60 ft. Nivel 3: sensibilidad a la luz solar (desventaja en ataques y percepción visual bajo luz solar directa). Nivel 4: “Encoge y ruega” (acción; aliados con ventaja contra enemigos cercanos; recarga en descanso corto/largo). Nivel 5: hermafrodita (puede cambiar sexo en descanso largo). Nivel 6: velocidad de excavación igual a la velocidad y acción adicional para enterrarse (ventaja en sigilo y cobertura). Nivel 7: tácticas de manada (ventaja si hay aliado a 5 ft). Nivel 8: comprende dracónico. Nivel 9: fortaleza kobold (HP máximo reducido a la mitad). Además, +2 a una característica o +1 a dos, ventaja contra miedo.</td>
+          </tr>
+          <tr>
+            <td><strong>+1 Grimorio Arcano</strong></td>
+            <td><span class="badge green">Poco común</span></td>
+            <td><span class="badge blue">Sí (mago)</span></td>
+            <td><span class="badge">No</span></td>
+            <td>+1 a ataques de conjuro y CD de conjuros. Funciona como foco arcano. Mejora Arcane Recovery (+1 nivel adicional de recuperación de espacios de conjuro).</td>
+          </tr>
+          <tr>
+            <td><strong>Escudo +2 Orden del Dragón de Plata</strong></td>
+            <td><span class="badge blue">Raro</span></td>
+            <td><span class="badge">No (no especifica)</span></td>
+            <td><span class="badge">No</span></td>
+            <td>+2 adicional a la CA (además del escudo). Otorga +2 a la iniciativa mientras no esté incapacitado.</td>
+          </tr>
+          <tr>
+            <td><strong>Perfume de Bewitching</strong></td>
+            <td><span class="badge">Común</span></td>
+            <td><span class="badge">No</span></td>
+            <td><span class="badge red">Sí</span></td>
+            <td>1 uso. Durante 1 hora, ventaja en tiradas de Carisma contra humanoides de CR 1 o inferior. Los afectados no perciben la influencia mágica.</td>
+          </tr>
+          <tr>
+            <td><strong>Pergamino de protección contra bestias</strong></td>
+            <td><span class="badge blue">Raro</span></td>
+            <td><span class="badge">No</span></td>
+            <td><span class="badge red">Sí</span></td>
+            <td>Acción para activar. Barrera (radio 5 ft, altura 10 ft, 5 min) que impide el paso o efecto de bestias. CD 15 de Carisma para atravesarla.</td>
+          </tr>
+          <tr>
+            <td><strong>Pergamino de protección contra elementales</strong></td>
+            <td><span class="badge blue">Raro</span></td>
+            <td><span class="badge">No</span></td>
+            <td><span class="badge red">Sí</span></td>
+            <td>Igual que el anterior, pero contra elementales.</td>
+          </tr>
+          <tr>
+            <td><strong>Pergamino aliento de dragón</strong></td>
+            <td><span class="badge green">Poco común</span></td>
+            <td><span class="badge">No</span></td>
+            <td><span class="badge red">Sí</span></td>
+            <td>Conjuro de nivel 2. Otorga aliento en cono de 15 ft (3d6 daño, salvación de Destreza mitad). Tipo a elegir (ácido, frío, fuego, rayo o veneno). Concentración hasta 1 min.</td>
+          </tr>
+          <tr>
+            <td><strong>Pergamino de Oscuridad enloquecedora</strong></td>
+            <td><span class="badge gold">Muy raro</span></td>
+            <td><span class="badge">No</span></td>
+            <td><span class="badge red">Sí</span></td>
+            <td>Conjuro de nivel 8. Esfera de oscuridad (60 ft) que bloquea incluso darkvision. Criaturas dentro reciben 8d8 daño psíquico por turno (salvación de Sabiduría mitad). Concentración hasta 10 min.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card section full">
+      <h2>Conjuros clave</h2>
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th>Conjuro</th>
+            <th>Nivel</th>
+            <th>Acción</th>
+            <th>Duración</th>
+            <th>Efecto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Hypnotic Pattern</strong></td><td>3</td><td>1 acción</td><td>Concentración (1 min)</td><td>Cubo de 30 ft. Criaturas fallan Sabiduría quedan encantadas e incapacitadas.</td></tr>
+          <tr><td><strong>Hold Person</strong></td><td>2</td><td>1 acción</td><td>Concentración (1 min)</td><td>Humanoide paralizado. Repite salvación cada turno.</td></tr>
+          <tr><td><strong>Storm Sphere</strong></td><td>4</td><td>1 acción</td><td>Concentración (1 min)</td><td>Área de viento, terreno difícil, daño y rayo adicional por bonus action.</td></tr>
+          <tr><td><strong>Fireball</strong></td><td>3</td><td>1 acción</td><td>Instantáneo</td><td>Explosión 20 ft, 8d6 fuego (Dex mitad).</td></tr>
+          <tr><td><strong>Cone of Cold</strong></td><td>5</td><td>1 acción</td><td>Instantáneo</td><td>Cono 60 ft, 8d8 frío (Con mitad).</td></tr>
+          <tr><td><strong>Polymorph</strong></td><td>4</td><td>1 acción</td><td>Concentración (1 h)</td><td>Transforma criatura en bestia o elimina enemigo temporalmente.</td></tr>
+          <tr><td><strong>Haste</strong></td><td>3</td><td>1 acción</td><td>Concentración (1 min)</td><td>+2 CA, acción adicional, velocidad duplicada.</td></tr>
+          <tr><td><strong>Shield</strong></td><td>1</td><td>Reacción</td><td>1 ronda</td><td>+5 CA hasta el siguiente turno.</td></tr>
+          <tr><td><strong>Absorb Elements</strong></td><td>1</td><td>Reacción</td><td>1 turno</td><td>Reduce daño elemental y lo devuelve en ataque.</td></tr>
+          <tr><td><strong>Enlarge / Reduce</strong></td><td>2</td><td>1 acción</td><td>Concentración (1 min)</td><td>Aumenta aliado o debilita enemigo.</td></tr>
+          <tr><td><strong>Healing Word</strong></td><td>1</td><td>Bonus action</td><td>Instantáneo</td><td>Cura a distancia, útil para levantar aliados.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card section full">
+      <h2>Hitos de la historia</h2>
+      <div class="list">
+        <div class="list-item">
+          <strong>Carrera de hipogrifos y el collar</strong><br>
+          <span class="muted">Aberroes gana la carrera de hipogrifos y obtiene el Collar de los Héroes Kobolds. A partir de ese momento comienza su transformación progresiva en kobold.</span>
+        </div>
+        <div class="list-item">
+          <strong>Anuc y Anac</strong><br>
+          <span class="muted">Mantiene una relación cercana con Anuc y Anac, de quienes se siente responsable, ya que el poder del collar está ligado a la herencia de su padre dragón.</span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
